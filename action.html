@@ -9,7 +9,7 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
 import { getDatabase, ref, update, increment } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
 
-// 🔹 Mets ici ta config Firebase identique à overlay.html
+// 🔹 Ta config Firebase
 const firebaseConfig = {
   apiKey: "AIzaSyBdb_c323T5-Bv30WR2C11trPlHCN28XEM",
   authDomain: "djedrums-4e59f.firebaseapp.com",
@@ -40,7 +40,9 @@ if(action === "reset"){
 
 update(ref(db), updateData).then(()=>{
   console.log("Firebase mis à jour :", updateData);
-});
+  // 🔹 Ferme la page après modification
+  window.close();
+}).catch(console.error);
 </script>
 </body>
 </html>
