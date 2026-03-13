@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Vote Counter</title>
+
+<style>
+
+body{
+margin:0;
+background:transparent;
+font-family:Arial, sans-serif;
+}
+
+.container{
+display:flex;
+justify-content:center;
+align-items:center;
+gap:120px;
+height:100vh;
+}
+
+.vote{
+text-align:center;
+}
+
+.label{
+font-size:40px;
+font-weight:bold;
+}
+
+.count{
+font-size:140px;
+font-weight:bold;
+}
+
+.oui{ color:#00ff99; }
+.non{ color:#ff3366; }
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="vote">
+<div class="label oui">OUI</div>
+<div id="oui" class="count">0</div>
+</div>
+
+<div class="vote">
+<div class="label non">NON</div>
+<div id="non" class="count">0</div>
+</div>
+
+</div>
+
+<script>
+
+let oui = parseInt(localStorage.getItem("vote_oui") || 0)
+let non = parseInt(localStorage.getItem("vote_non") || 0)
+
+const params = new URLSearchParams(window.location.search)
+const action = params.get("action")
+
+if(action === "oui_plus") oui++
+if(action === "oui_moins") oui--
+if(action === "non_plus") non++
+if(action === "non_moins") non--
+
+if(action === "reset"){
+oui = 0
+non = 0
+}
+
+oui = Math.max(0, oui)
+non = Math.max(0, non)
+
+localStorage.setItem("vote_oui", oui)
+localStorage.setItem("vote_non", non)
+
+document.getElementById("oui").textContent = oui
+document.getElementById("non").textContent = non
+
+</script>
+
+</body>
+</html>
