@@ -4,11 +4,20 @@
 <meta charset="UTF-8">
 <title>Vote Overlay</title>
 <style>
+/* Import de la police She Smile depuis le fichier local */
+@font-face {
+  font-family: "She Smile";
+  src: url("She Smiles.otf") format("opentype");
+  font-weight: normal;
+  font-style: normal;
+}
+
 body {
   margin:0;
   background:transparent;
-  font-family:Arial,sans-serif;
+  font-family:"She Smile", Arial, sans-serif;
 }
+
 .container{
   display:flex;
   justify-content:center;
@@ -16,31 +25,63 @@ body {
   gap:120px;
   height:100vh;
 }
+
 .vote{
   text-align:center;
+  display:flex;
+  align-items: center;
+  gap:25px;
+}
+.vote img{
+  width:120px;
+  height:120px;
+  object-fit:contain;
 }
 .label{
   font-size:40px;
   font-weight:bold;
 }
+
 .count{
   font-size:140px;
   font-weight:bold;
+  /* Contour autour du texte */
+  -webkit-text-stroke: 0.1px rgb(255, 255, 255); /* Chrome, Edge, Safari */
+  text-stroke: 0.1px rgb(255, 255, 255); /* pas encore standard partout */
+
+
 }
-.oui{ color:#00ff99; }
-.non{ color:#ff3366; }
+
+.oui{ 
+    color:#3FBA4C;
+    width: 90px;
+    text-align: center;
+    display: flex;
+    align-content: center;
+    justify-content: center;
+    align-items: center;
+}
+.non{ 
+    color:#F41D25;
+    width: 90px;
+    text-align: center;
+    display: flex;
+    align-content: center;
+    justify-content: center;
+    align-items: center;
+}
 </style>
 </head>
 <body>
 
 <div class="container">
   <div class="vote">
-    <div class="label oui">OUI</div>
-    <div id="oui" class="count">0</div>
+    <img src="oui.png" alt="Oui" />
+    <div id="oui" class="count oui">0</div>
   </div>
   <div class="vote">
-    <div class="label non">NON</div>
-    <div id="non" class="count">0</div>
+    <img src="non.png" alt="Non" />     
+    <div id="non" class="count non">0</div>
   </div>
 </div>
 
