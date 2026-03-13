@@ -2,87 +2,74 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<title>Vote Counter</title>
-
+<title>Vote Overlay</title>
 <style>
-
-body{
-margin:0;
-background:transparent;
-font-family:Arial, sans-serif;
+body {
+  margin:0;
+  background:transparent;
+  font-family:Arial,sans-serif;
 }
-
 .container{
-display:flex;
-justify-content:center;
-align-items:center;
-gap:120px;
-height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:120px;
+  height:100vh;
 }
-
 .vote{
-text-align:center;
+  text-align:center;
 }
-
 .label{
-font-size:40px;
-font-weight:bold;
+  font-size:40px;
+  font-weight:bold;
 }
-
 .count{
-font-size:140px;
-font-weight:bold;
+  font-size:140px;
+  font-weight:bold;
 }
-
 .oui{ color:#00ff99; }
 .non{ color:#ff3366; }
-
 </style>
 </head>
-
 <body>
 
 <div class="container">
-
-<div class="vote">
-<div class="label oui">OUI</div>
-<div id="oui" class="count">0</div>
+  <div class="vote">
+    <div class="label oui">OUI</div>
+    <div id="oui" class="count">0</div>
+  </div>
+  <div class="vote">
+    <div class="label non">NON</div>
+    <div id="non" class="count">0</div>
+  </div>
 </div>
 
-<div class="vote">
-<div class="label non">NON</div>
-<div id="non" class="count">0</div>
-</div>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
 
-</div>
+// 🔹 Mets ici la même config que action.html
+const firebaseConfig = {
+  apiKey: "AIzaSyBdb_c323T5-Bv30WR2C11trPlHCN28XEM",
+  authDomain: "djedrums-4e59f.firebaseapp.com",
+  databaseURL: "https://djedrums-4e59f-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "djedrums-4e59f",
+  storageBucket: "djedrums-4e59f.firebasestorage.app",
+  messagingSenderId: "377726412793",
+  appId: "1:377726412793:web:0cd2c84d13aad404697f28",
+  measurementId: "G-W3ZYHYHEXE"
+};
 
-<script>
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
 
-let oui = parseInt(localStorage.getItem("vote_oui") || 0)
-let non = parseInt(localStorage.getItem("vote_non") || 0)
+const votesRef = ref(db,"votes");
 
-const params = new URLSearchParams(window.location.search)
-const action = params.get("action")
-
-if(action === "oui_plus") oui++
-if(action === "oui_moins") oui--
-if(action === "non_plus") non++
-if(action === "non_moins") non--
-
-if(action === "reset"){
-oui = 0
-non = 0
-}
-
-oui = Math.max(0, oui)
-non = Math.max(0, non)
-
-localStorage.setItem("vote_oui", oui)
-localStorage.setItem("vote_non", non)
-
-document.getElementById("oui").textContent = oui
-document.getElementById("non").textContent = non
-
+onValue(votesRef, (snapshot) => {
+  const data = snapshot.val();
+  document.getElementById("oui").textContent = data.oui;
+  document.getElementById("non").textContent = data.non;
+});
 </script>
 
 </body>
