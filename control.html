@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Vote Control</title>
+<style>
+body {
+  font-family: Arial, sans-serif;
+  background: #121212;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 40px;
+}
+h1 {
+  margin-bottom: 20px;
+}
+button {
+  font-size: 20px;
+  padding: 10px 20px;
+  margin: 10px;
+  cursor: pointer;
+  border: none;
+  border-radius: 8px;
+  transition: 0.2s;
+}
+button:hover { transform: scale(1.05); }
+.oui_plus { background-color: #00ff99; color: #000; }
+.oui_moins { background-color: #009966; color: #fff; }
+.non_plus { background-color: #ff3366; color: #fff; }
+.non_moins { background-color: #990022; color: #fff; }
+.reset { background-color: #888; color: #000; }
+</style>
+</head>
+<body>
+
+<h1>Contrôle Votes</h1>
+
+<div>
+  <button class="oui_plus">+ OUI</button>
+  <button class="oui_moins">- OUI</button>
+  <button class="non_plus">+ NON</button>
+  <button class="non_moins">- NON</button>
+  <button class="reset">RESET</button>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+import { getDatabase, ref, update, increment } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+
+// 🔹 Mets ici la même config que index.html
+const firebaseConfig = {
+  apiKey: "AIzaSyBdb_c323T5-Bv30WR2C11trPlHCN28XEM",
+  authDomain: "djedrums-4e59f.firebaseapp.com",
+  databaseURL: "https://djedrums-4e59f-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "djedrums-4e59f",
+  storageBucket: "djedrums-4e59f.firebasestorage.app",
+  messagingSenderId: "377726412793",
+  appId: "1:377726412793:web:0cd2c84d13aad404697f28",
+  measurementId: "G-W3ZYHYHEXE"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+
+function updateVote(action){
+  const votesRef = ref(db);
+  let updateData = {};
+  if(action === "oui_plus") updateData["votes/oui"] = increment(1);
+  else if(action === "oui_moins") updateData["votes/oui"] = increment(-1);
+  else if(action === "non_plus") updateData["votes/non"] = increment(1);
+  else if(action === "non_moins") updateData["votes/non"] = increment(-1);
+  else if(action === "reset") {
+    updateData["votes/oui"] = 0;
+    updateData["votes/non"] = 0;
+  }
+  update(votesRef, updateData)
+    .then(()=>console.log("Firebase mis à jour :", updateData))
+    .catch(err=>console.error(err));
+}
+
+// Liaison boutons
+document.querySelector(".oui_plus").addEventListener("click", ()=>updateVote("oui_plus"));
+document.querySelector(".oui_moins").addEventListener("click", ()=>updateVote("oui_moins"));
+document.querySelector(".non_plus").addEventListener("click", ()=>updateVote("non_plus"));
+document.querySelector(".non_moins").addEventListener("click", ()=>updateVote("non_moins"));
+document.querySelector(".reset").addEventListener("click", ()=>updateVote("reset"));
+</script>
+
+</body>
+</html>
